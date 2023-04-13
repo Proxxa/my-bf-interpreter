@@ -1,12 +1,11 @@
-
-const LEFT_CH : char = '<';
-const RIGHT_CH : char = '>';
-const INC_CH : char = '+';
-const DEC_CH : char = '-';
-const IN_CH : char = ',';
-const OUT_CH : char = '.';
-const LOOP_CH : char = '[';
-const ELOOP_CH : char = ']';
+const LEFT_CH: char = '<';
+const RIGHT_CH: char = '>';
+const INC_CH: char = '+';
+const DEC_CH: char = '-';
+const IN_CH: char = ',';
+const OUT_CH: char = '.';
+const LOOP_CH: char = '[';
+const ELOOP_CH: char = ']';
 
 #[allow(dead_code)]
 #[derive(Debug)]
@@ -33,8 +32,8 @@ pub fn compile(instructions: String) -> BFProgram {
 
     validate(instructions.clone());
 
-    let mut invec : Vec<Instruction> = vec![];
-    let mut nesting : Vec<usize> = vec![];
+    let mut invec: Vec<Instruction> = vec![];
+    let mut nesting: Vec<usize> = vec![];
     let mut instruction = 0;
     let mut a: usize;
 
@@ -49,25 +48,29 @@ pub fn compile(instructions: String) -> BFProgram {
             LOOP_CH => {
                 invec.push(DUMMY);
                 nesting.push(instruction);
-            },
+            }
             ELOOP_CH => {
-                a = nesting.pop().expect("Somehow validated invalid instructions.");
+                a = nesting
+                    .pop()
+                    .expect("Somehow validated invalid instructions.");
                 invec[a] = LOOP(instruction);
                 invec.push(ELOOP(a));
-            },
+            }
             _ => continue, // skip increment
         }
 
         instruction += 1;
     }
 
-    BFProgram { instructions: invec }
+    BFProgram {
+        instructions: invec,
+    }
 }
 
 pub fn validate(instructions: String) {
-    let mut nested : usize = 0;
-    let mut row : usize = 0;
-    let mut col : usize = 0;
+    let mut nested: usize = 0;
+    let mut row: usize = 0;
+    let mut col: usize = 0;
     for c in instructions.as_bytes() {
         row += 1;
         match *c as char {
@@ -77,11 +80,11 @@ pub fn validate(instructions: String) {
                     panic!("unmatched {ELOOP_CH} at {row}:{col}");
                 }
                 nested -= 1;
-            },
+            }
             '\r' | '\n' => {
                 col += 1;
                 row = 0;
-            },
+            }
             _ => continue,
         }
     }

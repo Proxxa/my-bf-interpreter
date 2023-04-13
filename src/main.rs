@@ -1,9 +1,9 @@
-mod reader;
 mod compiler;
 mod interpreter;
+mod reader;
 
 fn main() -> std::io::Result<()> {
-    let args : Vec<String> = std::env::args().collect();
+    let args: Vec<String> = std::env::args().collect();
     if args.len() < 1 {
         panic!("Collected no arguments");
     }
@@ -17,7 +17,6 @@ fn main() -> std::io::Result<()> {
     let program = compiler::compile(instructions);
 
     interpreter::interpret(program);
-
 
     Ok(())
 }
