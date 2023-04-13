@@ -24,7 +24,7 @@ pub fn interpret(prog: BFProgram) {
         match ins[ip] {
             LEFT => {
                 if dp == 0 {
-                    dp = MEMSIZE;
+                    dp = MEMSIZE - 1;
                 } else {
                     dp -= 1;
                 }
